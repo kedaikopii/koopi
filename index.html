@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kedai Kopi Mr.B - Profile & Catalog</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        coffee: {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            500: '#8c5a45',
+                            700: '#5c3a2b',
+                            800: '#3e271d',
+                            900: '#23140e',
+                        },
+                        amber: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Print Stylesheet for Receipt */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-receipt, #printable-receipt * {
+                visibility: visible;
+            }
+            #printable-receipt {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 20px;
+                background: #fff;
+                color: #000;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- NAVBAR -->
+    <nav class="bg-coffee-900 text-white sticky top-0 z-40 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Brand -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="scrollToTop()">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-600 to-coffee-500 flex items-center justify-center font-bold text-xl text-white shadow-md border-2 border-amber-400">
+                        Mr.B
+                    </div>
+                    <div>
+                        <span class="font-bold text-xl tracking-wide block leading-tight text-amber-400">KEDAI KOPI</span>
+                        <span class="text-xs tracking-widest text-stone-300 font-light">MR. B COFFEE & EATERY</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#hero" class="hover:text-amber-400 transition font-medium">Beranda</a>
+                    <a href="#menu" class="hover:text-amber-400 transition font-medium">Katalog Menu</a>
+                    <a href="#about" class="hover:text-amber-400 transition font-medium">Tentang Kami</a>
+                    <a href="#contact" class="hover:text-amber-400 transition font-medium">Kontak</a>
+                </div>
+
+                <!-- Action Buttons (Cart & Login/User) -->
+                <div class="flex items-center gap-4">
+                    <!-- Cart Button -->
+                    <button onclick="toggleCartModal()" class="relative p-2.5 bg-coffee-800 hover:bg-coffee-700 text-amber-400 rounded-full transition shadow-inner">
+                        <i class="fa-solid fa-cart-shopping text-lg"></i>
+                        <span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-coffee-900">0</span>
+                    </button>
+
+                    <!-- Auth Button Container -->
+                    <div id="auth-btn-container">
+                        <button onclick="openLoginModal()" class="bg-amber-500 hover:bg-amber-600 text-coffee-900 font-semibold px-4 py-2 rounded-lg transition shadow-md flex items-center gap-2">
+                            <i class="fa-solid fa-right-to-bracket"></i> Login Kasir
+                        </button>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-stone-300 hover:text-white text-2xl focus:outline-none">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-coffee-800 border-t border-coffee-700 px-4 pt-2 pb-4 space-y-2">
+            <a href="#hero" onclick="toggleMobileMenu()" class="block py-2 text-stone-200 hover:text-amber-400">Beranda</a>
+            <a href="#menu" onclick="toggleMobileMenu()" class="block py-2 text-stone-200 hover:text-amber-400">Katalog Menu</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="block py-2 text-stone-200 hover:text-amber-400">Tentang Kami</a>
+            <a href="#contact" onclick="toggleMobileMenu()" class="block py-2 text-stone-200 hover:text-amber-400">Kontak</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="relative bg-gradient-to-r from-coffee-900 via-coffee-800 to-coffee-900 text-white py-20 lg:py-28 overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80')] bg-cover bg-center"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center lg:text-left flex flex-col lg:flex-row items-center justify-between gap-12">
+            <div class="lg:w-1/2 space-y-6">
+                <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-sm font-semibold tracking-wide border border-amber-500/30">
+                    ☕ Welcome to Kedai Kopi Mr.B
+                </span>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+                    Cita Rasa Kopi Sejati & <span class="text-amber-400">Kuliner Lezat</span>
+                </h1>
+                <p class="text-stone-300 text-lg max-w-xl">
+                    Nikmati racikan espresso pilihan, varian minuman kekinian, hingga sajian hidangan lezat mulai dari Steak, Pasta, Nasi Goreng, hingga Sushi.
+                </p>
+                <div class="flex flex-wrap justify-center lg:justify-start gap-4 pt-2">
+                    <a href="#menu" class="bg-amber-500 hover:bg-amber-600 text-coffee-900 font-bold px-6 py-3.5 rounded-xl transition duration-300 shadow-lg flex items-center gap-2">
+                        <i class="fa-solid fa-mug-hot"></i> Lihat Katalog Menu
+                    </a>
+                    <a href="https://wa.me/083165185643" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3.5 rounded-xl transition duration-300 shadow-lg flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-xl"></i> Pesan via WhatsApp
+                    </a>
+                </div>
+            </div>
+            <div class="lg:w-1/2 relative">
+                <div class="w-72 h-72 sm:w-96 sm:h-96 mx-auto rounded-3xl overflow-hidden shadow-2xl border-4 border-amber-500/30 transform hover:scale-105 transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80" alt="Kedai Kopi Mr.B Signature" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KATALOG MENU SECTION -->
+    <section id="menu" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl font-bold text-coffee-900">Katalog Menu Kedai Kopi Mr.B</h2>
+            <p class="text-stone-600 mt-2">Pilih kategori favorit Anda dan nikmati kelezatannya</p>
+            <div class="w-20 h-1 bg-amber-500 mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <!-- Filter Categories Navigation -->
+        <div class="flex flex-wrap justify-center gap-2 mb-10 overflow-x-auto pb-2">
+            <button onclick="filterCategory('all')" class="cat-btn active bg-coffee-900 text-white px-5 py-2.5 rounded-full font-medium text-sm transition shadow">Semua</button>
+            <button onclick="filterCategory('coffee')" class="cat-btn bg-white text-stone-700 hover:bg-stone-200 px-5 py-2.5 rounded-full font-medium text-sm transition shadow">Coffee</button>
+            <button onclick="filterCategory('non-coffee')" class="cat-btn bg-white text-stone-700 hover:bg-stone-200 px-5 py-2.5 rounded-full font-medium text-sm transition shadow">Non-Coffee</button>
+            <button onclick="filterCategory('cemilan')" class="cat-btn bg-white text-stone-700 hover:bg-stone-200 px-5 py-2.5 rounded-full font-medium text-sm transition shadow">Cemilan</button>
+            <button onclick="filterCategory('pasta')" class="cat-btn bg-white text-stone-700 hover:bg-stone-200 px-5 py-2.5 rounded-full font-medium text-sm transition shadow">Pasta & Noodle</button>
+            <button onclick="filterCategory('nasgor')" class="cat-btn bg-white text-stone-700 hover:bg-stone-200 px-5 py-2.5 rounded-full font-medium text-sm transition shadow">Nasi Goreng</button>
+            <button onclick="filterCategory('steak')" class="cat-btn bg-white text-stone-700 hover:bg-stone-200 px-5 py-2.5 rounded-full font-medium text-sm transition shadow">Steak</button>
+            <button onclick="filterCategory('sushi')" class="cat-btn bg-white text-stone-700 hover:bg-stone-200 px-5 py-2.5 rounded-full font-medium text-sm transition shadow">Sushi</button>
+        </div>
+
+        <!-- Menu Grid -->
+        <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Menu Items standard JS injects here -->
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION & LOGO FOOTER -->
+    <section id="about" class="bg-stone-100 py-16 border-t border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-4">
+                    <span class="text-amber-600 font-semibold text-sm tracking-widest uppercase">Tentang Kami</span>
+                    <h2 class="text-3xl font-bold text-coffee-900">Kedai Kopi Mr.B</h2>
+                    <p class="text-stone-600 leading-relaxed">
+                        Kedai Kopi Mr.B adalah tempat nongkrong asyik dan nyaman yang menyajikan aneka olahan kopi berkualitas tinggi, minuman segar non-kopi, hingga beragam sajian makanan kuliner favorit mulai dari cemilan lezat, pasta gurih, nasi goreng khas, steak empuk, hingga hidangan sushi segar.
+                    </p>
+                    <p class="text-stone-600 leading-relaxed">
+                        Kami mengutamakan cita rasa autentik dan pelayanan ramah untuk memberikan pengalaman bersantai terbaik bagi Anda, keluarga, dan teman-teman.
+                    </p>
+                    
+                    <!-- Operational Hours -->
+                    <div class="pt-2">
+                        <h4 class="font-bold text-coffee-800 mb-2 flex items-center gap-2">
+                            <i class="fa-regular fa-clock text-amber-600"></i> Jam Operasional:
+                        </h4>
+                        <p class="text-sm text-stone-600">Senin - Minggu: 10.00 - 23.00 WIB</p>
+                    </div>
+                </div>
+
+                <!-- Logo & Brand Visual Box -->
+                <div class="flex flex-col items-center justify-center bg-coffee-900 p-8 rounded-3xl text-center shadow-xl border-4 border-amber-500/20 text-white relative">
+                    <!-- Brand Logo Visual -->
+                    <div class="w-32 h-32 rounded-full bg-gradient-to-br from-amber-500 via-amber-600 to-coffee-800 flex items-center justify-center border-4 border-amber-400 shadow-2xl mb-4 transform hover:rotate-6 transition duration-300">
+                        <div class="text-center">
+                            <i class="fa-solid fa-mug-hot text-3xl text-amber-200 mb-1"></i>
+                            <span class="block font-black text-xl tracking-wider text-white">Mr.B</span>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-amber-400">KEDAI KOPI MR.B</h3>
+                    <p class="text-xs text-stone-300 mt-1 uppercase tracking-widest">Coffee & Culinary Space</p>
+                    <p class="text-xs text-stone-400 mt-4 italic max-w-xs">"Nikmati Setiap Tegukan & Gigitan Kebahagiaan di Kedai Kopi Mr.B"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER / CONTACT SECTION -->
+    <footer id="contact" class="bg-coffee-900 text-stone-300 pt-12 pb-8 border-t border-coffee-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-coffee-800">
+                
+                <!-- Info Kedai -->
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-amber-400 flex items-center gap-2">
+                        <i class="fa-solid fa-store"></i> Kedai Kopi Mr.B
+                    </h3>
+                    <p class="text-sm text-stone-400">
+                        Destinasi kopi dan kuliner pilihan utama Anda. Rasakan kenyamanan dan kelezatan hidangan terbaik kami.
+                    </p>
+                </div>
+
+                <!-- Media Sosial & Kontak -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-semibold text-white">Hubungi Kami</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li>
+                            <a href="https://wa.me/083165185643" target="_blank" class="hover:text-emerald-400 flex items-center gap-2 transition">
+                                <i class="fa-brands fa-whatsapp text-emerald-500 text-base"></i> WhatsApp: 083165185643
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/kedaikopi.mr.b?psln=MWNpNm5ieHZ2Mm91NQ==" target="_blank" class="hover:text-pink-400 flex items-center gap-2 transition">
+                                <i class="fa-brands fa-instagram text-pink-500 text-base"></i> Instagram: @kedaikopi.mr.b
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Lokasi Maps -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-semibold text-white">Lokasi Kedai</h3>
+                    <p class="text-sm text-stone-400">Temukan lokasi kedai kami di Google Maps:</p>
+                    <a href="https://maps.app.goo.gl/eP2xX7Cfs8HqiPkJA?g_st=ac" target="_blank" class="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-coffee-900 font-semibold px-4 py-2 rounded-lg text-sm transition shadow">
+                        <i class="fa-solid fa-map-location-dot"></i> Buka Google Maps
+                    </a>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="pt-6 text-center text-xs text-stone-500">
+                <p>&copy; 2026 Kedai Kopi Mr.B. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL LOGIN -->
+    <div id="login-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative transform transition-all">
+            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-2 text-2xl font-bold">
+                    <i class="fa-solid fa-user-lock"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-coffee-900">Login Kasir</h3>
+                <p class="text-xs text-stone-500">Masuk untuk mengakses sistem transaksi & cetak struk</p>
+            </div>
+
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-stone-600 uppercase mb-1">Username</label>
+                    <input type="text" id="username" required placeholder="kedaikopi.mr.b" class="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-stone-600 uppercase mb-1">Password</label>
+                    <input type="password" id="password" required placeholder="67890" class="w-full px-4 py-2.5 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm">
+                </div>
+                <div id="login-error" class="hidden text-red-500 text-xs text-center font-medium">
+                    Username atau Password salah!
+                </div>
+                <button type="submit" class="w-full bg-coffee-900 hover:bg-coffee-800 text-white font-bold py-3 rounded-lg transition shadow-md">
+                    Masuk
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL KERANJANG & CHECKOUT (KASIR) -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl relative flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between pb-4 border-b border-stone-200">
+                <h3 class="text-xl font-bold text-coffee-900 flex items-center gap-2">
+                    <i class="fa-solid fa-basket-shopping text-amber-600"></i> Keranjang & Kasir
+                </h3>
+                <button onclick="toggleCartModal()" class="text-stone-400 hover:text-stone-600">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items List -->
+            <div id="cart-items-container" class="flex-1 overflow-y-auto py-4 space-y-3">
+                <!-- Cart items JS injected here -->
+            </div>
+
+            <!-- Order Options & Total -->
+            <div class="pt-4 border-t border-stone-200 space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-600 mb-1">Nama Pelanggan / Meja</label>
+                        <input type="text" id="customer-name" placeholder="Contoh: Meja 05 / Andi" class="w-full px-3 py-1.5 border border-stone-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-600 mb-1">Metode Bayar</label>
+                        <select id="payment-method" class="w-full px-3 py-1.5 border border-stone-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none bg-white">
+                            <option value="Tunai / Cash">Tunai / Cash</option>
+                            <option value="QRIS">QRIS</option>
+                            <option value="Transfer Bank">Transfer Bank</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <span class="text-base font-bold text-stone-700">Total Pembayaran:</span>
+                    <span id="cart-total-price" class="text-xl font-extrabold text-amber-600">Rp 0</span>
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button onclick="clearCart()" class="w-1/3 bg-stone-200 hover:bg-stone-300 text-stone-700 font-semibold py-2.5 rounded-xl text-sm transition">
+                        Kosongkan
+                    </button>
+                    <button onclick="processCheckout()" class="w-2/3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-receipt"></i> Bayar & Cetak Struk
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL STRUK PEMBAYARAN (SIAP CETAK) -->
+    <div id="receipt-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
+            
+            <!-- Area yang Dicetak -->
+            <div id="printable-receipt" class="bg-white text-stone-900 font-mono text-xs">
+                <div class="text-center border-b border-dashed border-stone-400 pb-3 mb-3">
+                    <h2 class="text-base font-bold uppercase tracking-wider">KEDAI KOPI MR.B</h2>
+                    <p class="text-[10px]">Jl. Kopi Utama No. 8, Indonesia</p>
+                    <p class="text-[10px]">Telp/WA: 0831-6518-5643</p>
+                    <p class="text-[10px] mt-1" id="receipt-date"></p>
+                </div>
+
+                <div class="mb-2 text-[11px] space-y-0.5">
+                    <p><strong>Pelanggan/Meja:</strong> <span id="receipt-customer"></span></p>
+                    <p><strong>Kasir:</strong> <span id="receipt-cashier"></span></p>
+                    <p><strong>Metode Bayar:</strong> <span id="receipt-payment"></span></p>
+                </div>
+
+                <div class="border-t border-b border-dashed border-stone-400 py-2 my-2">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-stone-300">
+                                <th class="pb-1">Item</th>
+                                <th class="text-center pb-1">Qty</th>
+                                <th class="text-right pb-1">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="receipt-items-list">
+                            <!-- Items inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="space-y-1 text-right text-[11px]">
+                    <p class="flex justify-between font-bold text-xs pt-1 border-t border-stone-300">
+                        <span>TOTAL:</span>
+                        <span id="receipt-total">Rp 0</span>
+                    </p>
+                </div>
+
+                <div class="text-center mt-4 border-t border-dashed border-stone-400 pt-3">
+                    <p class="font-bold">-- TERIMA KASIH --</p>
+                    <p class="text-[10px] text-stone-500 mt-0.5">Selamat Menikmati Hidangan Anda</p>
+                    <p class="text-[9px] text-stone-400 mt-1">IG: @kedaikopi.mr.b</p>
+                </div>
+            </div>
+
+            <!-- Action buttons inside modal -->
+            <div class="mt-6 flex gap-2 no-print">
+                <button onclick="closeReceiptModal()" class="w-1/2 bg-stone-200 hover:bg-stone-300 text-stone-700 font-semibold py-2 rounded-xl text-sm transition">
+                    Tutup
+                </button>
+                <button onclick="window.print()" class="w-1/2 bg-amber-500 hover:bg-amber-600 text-coffee-900 font-bold py-2 rounded-xl text-sm transition shadow flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-print"></i> Cetak
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Data Menu Kedai Kopi Mr.B dengan gambar nyata (Unsplash)
+        const menuData = [
+            // Coffee
+            { id: 1, name: "Mr.B Coffee", category: "coffee", price: 22000, image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&q=80" },
+            { id: 2, name: "Kopi Susu Pandan", category: "coffee", price: 20000, image: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80" },
+            { id: 3, name: "Vanilla Coffee Latte", category: "coffee", price: 23000, image: "https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?auto=format&fit=crop&q=80" },
+            { id: 4, name: "Hazelnut Coffee", category: "coffee", price: 23000, image: "https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&q=80" },
+            { id: 5, name: "Cappuccino", category: "coffee", price: 22000, image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&q=80" },
+            { id: 7, name: "Mr.B Caramel Macchiato", category: "coffee", price: 25000, image: "https://images.unsplash.com/photo-1485808191679-5f86510681a2?auto=format&fit=crop&q=80" },
+            { id: 8, name: "Avocado Espresso", category: "coffee", price: 26000, image: "https://images.unsplash.com/photo-1592663527359-cf6642f54cff?auto=format&fit=crop&q=80" },
+
+            // Non Coffee
+            { id: 9, name: "Matcha Latte (Panas/Dingin)", category: "non-coffee", price: 22000, image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&q=80" },
+            { id: 10, name: "Milo Dino Latte", category: "non-coffee", price: 20000, image: "https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&q=80" },
+            { id: 11, name: "Rose Latte", category: "non-coffee", price: 21000, image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80" },
+            { id: 12, name: "Mocktail Berbasis Soda", category: "non-coffee", price: 23000, image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80" },
+
+            // Cemilan
+            { id: 13, name: "Churros", category: "cemilan", price: 18000, image: "https://images.unsplash.com/photo-1624371414361-e670edf4898d?auto=format&fit=crop&q=80" },
+            { id: 14, name: "French Fries", category: "cemilan", price: 15000, image: "https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&q=80" },
+            { id: 15, name: "Nugget Ayam", category: "cemilan", price: 18000, image: "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&q=80" },
+            { id: 16, name: "Chicken Burger", category: "cemilan", price: 25000, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80" },
+
+            // Pasta & Noodle
+            { id: 18, name: "Spicy Ramen", category: "pasta", price: 27000, image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&q=80" },
+            { id: 19, name: "Spaghetti Creamy Cheese", category: "pasta", price: 29000, image: "https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&q=80" },
+
+            // Nasi Goreng
+            { id: 20, name: "Nasi Goreng Kampung", category: "nasgor", price: 22000, image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&q=80" },
+            { id: 21, name: "Nasi Goreng Special", category: "nasgor", price: 27000, image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&q=80" },
+
+            // Steak
+            { id: 23, name: "Chicken Steak Blackpepper", category: "steak", price: 35000, image: "https://images.unsplash.com/photo-1432139555190-58524dae6a55?auto=format&fit=crop&q=80" },
+            { id: 24, name: "Chicken Steak Mushroom", category: "steak", price: 35000, image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80" },
+            { id: 25, name: "Chicken Steak BBQ", category: "steak", price: 35000, image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80" },
+
+            // Sushi
+            { id: 26, name: "Sushi Mentai", category: "sushi", price: 30000, image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&q=80" },
+            { id: 27, name: "Meggi Sushi Naraya", category: "sushi", price: 28000, image: "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&q=80" },
+            { id: 28, name: "Crispy Bite with Seaweed", category: "sushi", price: 26000, image: "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&q=80" }
+        ];
+
+        // Global State Variable
+        let cart = [];
+        let isLoggedIn = false;
+        let currentUser = null;
+
+        // Render Menu Items Function
+        function renderMenu(items) {
+            const container = document.getElementById('menu-grid');
+            container.innerHTML = '';
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 border border-stone-100 flex flex-col justify-between group";
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy">
+                            <span class="absolute top-3 right-3 bg-coffee-900/80 backdrop-blur-md text-amber-400 font-bold text-xs px-2.5 py-1 rounded-full border border-amber-500/30">
+                                ${capitalizeFirst(item.category)}
+                            </span>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-stone-800 text-lg group-hover:text-amber-600 transition">${item.name}</h3>
+                            <p class="text-amber-600 font-extrabold text-base mt-1">Rp ${item.price.toLocaleString('id-ID')}</p>
+                        </div>
+                    </div>
+                    <div class="p-4 pt-0">
+                        <button onclick="addToCart(${item.id})" class="w-full bg-stone-100 hover:bg-amber-500 hover:text-coffee-900 text-stone-800 font-semibold py-2 rounded-xl transition duration-300 flex items-center justify-center gap-2 text-sm shadow-sm">
+                            <i class="fa-solid fa-plus"></i> Tambah ke Pesanan
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Filter Category Handler
+        function filterCategory(category) {
+            // Update active button state
+            const buttons = document.querySelectorAll('.cat-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-coffee-900', 'text-white');
+                btn.classList.add('bg-white', 'text-stone-700');
+            });
+
+            event.target.classList.remove('bg-white', 'text-stone-700');
+            event.target.classList.add('bg-coffee-900', 'text-white');
+
+            if (category === 'all') {
+                renderMenu(menuData);
+            } else {
+                const filtered = menuData.filter(item => item.category === category);
+                renderMenu(filtered);
+            }
+        }
+
+        // Cart Logic Functions
+        function addToCart(itemId) {
+            const item = menuData.find(m => m.id === itemId);
+            const existing = cart.find(c => c.id === itemId);
+
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...item, qty: 1 });
+            }
+
+            updateCartUI();
+        }
+
+        function updateCartQty(itemId, change) {
+            const item = cart.find(c => c.id === itemId);
+            if (item) {
+                item.qty += change;
+                if (item.qty <= 0) {
+                    cart = cart.filter(c => c.id !== itemId);
+                }
+            }
+            updateCartUI();
+        }
+
+        function clearCart() {
+            cart = [];
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            // Badge Counter
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const badge = document.getElementById('cart-badge');
+            
+            if (totalQty > 0) {
+                badge.innerText = totalQty;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            // Cart Modal Content Render
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-stone-400">
+                        <i class="fa-solid fa-basket-shopping text-4xl mb-2"></i>
+                        <p class="text-sm">Keranjang Anda masih kosong</p>
+                    </div>
+                `;
+            } else {
+                cart.forEach(item => {
+                    const el = document.createElement('div');
+                    el.className = "flex items-center justify-between p-3 bg-stone-50 rounded-xl border border-stone-200";
+                    el.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded-lg">
+                            <div>
+                                <h4 class="font-bold text-xs text-stone-800">${item.name}</h4>
+                                <p class="text-xs text-amber-600 font-semibold">Rp ${item.price.toLocaleString('id-ID')}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="updateCartQty(${item.id}, -1)" class="w-6 h-6 bg-stone-200 hover:bg-stone-300 rounded-full flex items-center justify-center text-xs font-bold text-stone-700">-</button>
+                            <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+                            <button onclick="updateCartQty(${item.id}, 1)" class="w-6 h-6 bg-amber-500 hover:bg-amber-600 text-white rounded-full flex items-center justify-center text-xs font-bold">+</button>
+                        </div>
+                    `;
+                    container.appendChild(el);
+                });
+            }
+
+            // Total Price Calculation
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            document.getElementById('cart-total-price').innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+        }
+
+        // Modal Toggles
+        function toggleCartModal() {
+            document.getElementById('cart-modal').classList.toggle('hidden');
+        }
+
+        function openLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+            document.getElementById('login-error').classList.add('hidden');
+        }
+
+        function closeReceiptModal() {
+            document.getElementById('receipt-modal').classList.add('hidden');
+        }
+
+        // Authentication Handlers
+        function handleLogin(e) {
+            e.preventDefault();
+            const userVal = document.getElementById('username').value.trim();
+            const passVal = document.getElementById('password').value.trim();
+
+            if (userVal === "kedaikopi.mr.b" && passVal === "67890") {
+                isLoggedIn = true;
+                currentUser = userVal;
+                updateAuthUI();
+                closeLoginModal();
+                alert("Login Kasir Berhasil!");
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+
+        function handleLogout() {
+            isLoggedIn = false;
+            currentUser = null;
+            updateAuthUI();
+            alert("Logout berhasil.");
+        }
+
+        function updateAuthUI() {
+            const container = document.getElementById('auth-btn-container');
+            if (isLoggedIn) {
+                container.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-amber-400 font-semibold hidden sm:inline"><i class="fa-solid fa-user-circle"></i> Kasir Active</span>
+                        <button onclick="handleLogout()" class="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition shadow">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <button onclick="openLoginModal()" class="bg-amber-500 hover:bg-amber-600 text-coffee-900 font-semibold px-4 py-2 rounded-lg transition shadow-md flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-right-to-bracket"></i> Login Kasir
+                    </button>
+                `;
+            }
+        }
+
+        // Checkout & Print Receipt Handler
+        function processCheckout() {
+            if (!isLoggedIn) {
+                alert("Akses Ditolak! Anda harus Login Kasir terlebih dahulu untuk memproses pembayaran dan mencetak struk.");
+                toggleCartModal();
+                openLoginModal();
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert("Keranjang belanjaan Anda masih kosong!");
+                return;
+            }
+
+            const customerName = document.getElementById('customer-name').value.trim() || "Pelanggan Umum";
+            const paymentMethod = document.getElementById('payment-method').value;
+
+            // Populate Printable Receipt Data
+            const now = new Date();
+            document.getElementById('receipt-date').innerText = now.toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+            document.getElementById('receipt-customer').innerText = customerName;
+            document.getElementById('receipt-cashier').innerText = currentUser;
+            document.getElementById('receipt-payment').innerText = paymentMethod;
+
+            const itemsContainer = document.getElementById('receipt-items-list');
+            itemsContainer.innerHTML = '';
+
+            let total = 0;
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-1">${item.name}</td>
+                    <td class="text-center py-1">${item.qty}</td>
+                    <td class="text-right py-1">Rp ${subtotal.toLocaleString('id-ID')}</td>
+                `;
+                itemsContainer.appendChild(tr);
+            });
+
+            document.getElementById('receipt-total').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+
+            // Close Cart Modal & Show Receipt Modal
+            toggleCartModal();
+            document.getElementById('receipt-modal').classList.remove('hidden');
+
+            // Reset Cart
+            clearCart();
+            document.getElementById('customer-name').value = '';
+        }
+
+        // Helpers
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        // Initialize App
+        window.onload = function() {
+            renderMenu(menuData);
+            updateCartUI();
+        };
+    </script>
+</body>
+</html>
+```
